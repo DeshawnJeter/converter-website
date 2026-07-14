@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distance Quest Converter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero-card">
+        <p class="eyebrow">🌍 Distance Quest</p>
+        <h1>Convert miles and kilometers like a champion!</h1>
+        <p class="subtitle">Learn, play, and earn points as you switch between miles and kilometers.</p>
+      </header>
+
+      <section class="stats-card" aria-label="Gamified stats">
+        <div class="stat"><span class="stat-label">XP</span><strong id="xpValue">0</strong></div>
+        <div class="stat"><span class="stat-label">Streak</span><strong id="streakValue">0</strong></div>
+        <div class="stat"><span class="stat-label">Level</span><strong id="levelValue">1</strong></div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+          <small id="progressText">Next level in 100 XP</small>
+        </div>
+      </section>
+
+      <main class="converter-card">
+        <label class="field-label" for="valueInput">Enter a number</label>
+        <input id="valueInput" type="number" min="0" step="any" placeholder="Example: 10" />
+
+        <label class="field-label" for="directionSelect">Choose conversion</label>
+        <select id="directionSelect">
+          <option value="km-to-mi">km → mi</option>
+          <option value="mi-to-km">mi → km</option>
+        </select>
+
+        <button id="convertBtn">Convert now!</button>
+
+        <div id="messageBox" class="message-box" role="status" aria-live="polite">Ready to learn? Try your first conversion!</div>
+
+        <div class="result-card">
+          <p class="result-label">Your result</p>
+          <p id="resultValue" class="result-value">—</p>
+          <p id="resultHint" class="result-hint">Choose a direction and convert.</p>
+        </div>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
