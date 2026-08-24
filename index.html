@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Distance Quest Converter</title>
+    <title>Unit Quest Converter</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <header class="hero-card">
-        <p class="eyebrow">🌍 Distance Quest</p>
-        <h1>Convert miles and kilometers like a champion!</h1>
-        <p class="subtitle">Learn, play, and earn points as you switch between miles and kilometers.</p>
+        <p class="eyebrow">⚡ Unit Quest</p>
+        <h1>Convert any unit of measurement!</h1>
+        <p class="subtitle">Distance, weight, temperature, volume, and more — earn XP with every conversion.</p>
       </header>
 
       <section class="stats-card" aria-label="Gamified stats">
@@ -26,22 +26,26 @@
 
       <main class="converter-card">
         <label class="field-label" for="valueInput">Enter a number</label>
-        <input id="valueInput" type="number" min="0" step="any" placeholder="Example: 10" />
+        <input id="valueInput" type="number" step="any" placeholder="Example: 10" />
 
-        <label class="field-label" for="directionSelect">Choose conversion</label>
-        <select id="directionSelect">
-          <option value="km-to-mi">km → mi</option>
-          <option value="mi-to-km">mi → km</option>
-        </select>
+        <label class="field-label" for="categorySelect">Category</label>
+        <select id="categorySelect"></select>
+
+        <label class="field-label">Convert from → to</label>
+        <div class="unit-row">
+          <select id="fromUnit" aria-label="From unit"></select>
+          <span class="unit-arrow" aria-hidden="true">→</span>
+          <select id="toUnit" aria-label="To unit"></select>
+        </div>
 
         <button id="convertBtn">Convert now!</button>
 
-        <div id="messageBox" class="message-box" role="status" aria-live="polite">Ready to learn? Try your first conversion!</div>
+        <div id="messageBox" class="message-box" role="status" aria-live="polite">Ready to quest? Pick a category and convert!</div>
 
         <div class="result-card">
           <p class="result-label">Your result</p>
           <p id="resultValue" class="result-value">—</p>
-          <p id="resultHint" class="result-hint">Choose a direction and convert.</p>
+          <p id="resultHint" class="result-hint">Choose units and convert.</p>
         </div>
       </main>
     </div>
