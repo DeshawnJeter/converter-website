@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Unit Quest Converter</title>
+    <meta name="description" content="Convert any unit instantly — distance, weight, temperature, volume, speed, and more. Free, fast, no ads." />
+    <meta property="og:title" content="Unit Quest Converter" />
+    <meta property="og:description" content="Convert any unit instantly across 10 categories. Free, fast, no ads." />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -15,16 +18,16 @@
       </header>
 
       <main class="converter-card">
+        <label class="field-label">Category</label>
+        <div class="category-pills" id="categoryPills" role="tablist" aria-label="Conversion category"></div>
+
         <label class="field-label" for="valueInput">Enter a number</label>
         <input id="valueInput" type="number" step="any" placeholder="Example: 10" />
-
-        <label class="field-label" for="categorySelect">Category</label>
-        <select id="categorySelect"></select>
 
         <label class="field-label">Convert from → to</label>
         <div class="unit-row">
           <select id="fromUnit" aria-label="From unit"></select>
-          <span class="unit-arrow" aria-hidden="true">→</span>
+          <button class="swap-btn" id="swapBtn" type="button" aria-label="Swap units">⇄</button>
           <select id="toUnit" aria-label="To unit"></select>
         </div>
 
@@ -36,9 +39,15 @@
           <p class="result-label">Your result</p>
           <p id="resultValue" class="result-value">—</p>
           <p id="resultHint" class="result-hint">Choose units and convert.</p>
+          <div class="result-actions" id="resultActions" hidden>
+            <button class="action-btn" id="copyBtn" type="button" aria-label="Copy result to clipboard">Copy result</button>
+            <button class="action-btn" id="shareBtn" type="button" aria-label="Copy shareable link">Share link</button>
+          </div>
         </div>
       </main>
     </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
     <script src="script.js"></script>
   </body>

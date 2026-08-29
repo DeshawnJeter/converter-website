@@ -105,6 +105,7 @@ select {
   color: var(--text);
   font: inherit;
   padding: 12px 14px;
+  min-height: 44px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -120,7 +121,57 @@ select option {
   color: var(--text);
 }
 
-button {
+/* ── Category pills ────────────────────────────────────────── */
+
+.category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.cat-pill {
+  width: auto;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  background: rgba(10, 5, 25, 0.5);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  box-shadow: none;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.cat-pill:hover {
+  transform: none;
+  border-color: var(--primary);
+  color: var(--text);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+}
+
+.cat-pill--active {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.45);
+}
+
+.cat-pill--active:hover {
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.65);
+}
+
+.cat-pill:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ── Convert button (keep full-width, separate from pills) ── */
+
+#convertBtn {
   width: 100%;
   border-radius: 12px;
   border: none;
@@ -135,15 +186,57 @@ button {
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-button:hover {
+#convertBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 32px rgba(168, 85, 247, 0.65);
 }
 
-button:focus {
+#convertBtn:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
+/* ── Unit row with swap button ──────────────────────────────── */
+
+.unit-row {
+  display: grid;
+  grid-template-columns: 1fr 44px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.swap-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  background: rgba(10, 5, 25, 0.7);
+  color: var(--primary);
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: none;
+  letter-spacing: 0;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s, box-shadow 0.2s;
+  text-shadow: 0 0 10px var(--primary-glow);
+}
+
+.swap-btn:hover {
+  transform: rotate(180deg);
+  border-color: var(--primary);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.45);
+}
+
+.swap-btn:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ── Message box ────────────────────────────────────────────── */
 
 .message-box {
   padding: 12px;
@@ -154,6 +247,8 @@ button:focus {
   font-weight: 600;
   font-size: 0.9rem;
 }
+
+/* ── Result card ────────────────────────────────────────────── */
 
 .result-card {
   padding: 20px 16px;
@@ -185,20 +280,71 @@ button:focus {
   font-size: 0.9rem;
 }
 
-.unit-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+/* ── Result action buttons ──────────────────────────────────── */
+
+.result-actions {
+  display: flex;
   gap: 8px;
+  justify-content: center;
+  margin-top: 14px;
 }
 
-.unit-arrow {
-  font-size: 1.2rem;
-  color: var(--primary);
-  text-align: center;
-  user-select: none;
-  text-shadow: 0 0 10px var(--primary-glow);
+.action-btn {
+  width: auto;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  background: rgba(10, 5, 25, 0.5);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 7px 16px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  box-shadow: none;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
 }
+
+.action-btn:hover {
+  transform: none;
+  border-color: var(--primary);
+  color: var(--text);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+}
+
+.action-btn:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ── Toast notification ─────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 5, 25, 0.92);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.3), 0 8px 24px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  z-index: 100;
+  animation: toast-in 0.2s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
 
 @media (max-width: 480px) {
   body {
@@ -208,5 +354,18 @@ button:focus {
   .hero-card,
   .converter-card {
     border-radius: 18px;
+  }
+
+  select {
+    min-height: 44px;
+  }
+
+  .result-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .action-btn {
+    width: 100%;
   }
 }
