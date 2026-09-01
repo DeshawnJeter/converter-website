@@ -1,17 +1,22 @@
-const valueInput   = document.getElementById('valueInput');
+// ── DOM refs ───────────────────────────────────────────────────
+const valueInput    = document.getElementById('valueInput');
 const categoryPills = document.getElementById('categoryPills');
-const fromUnit     = document.getElementById('fromUnit');
-const toUnit       = document.getElementById('toUnit');
-const swapBtn      = document.getElementById('swapBtn');
-const convertBtn   = document.getElementById('convertBtn');
-const resultValue  = document.getElementById('resultValue');
-const resultHint   = document.getElementById('resultHint');
-const messageBox   = document.getElementById('messageBox');
+const fromUnit      = document.getElementById('fromUnit');
+const toUnit        = document.getElementById('toUnit');
+const swapBtn       = document.getElementById('swapBtn');
+const convertBtn    = document.getElementById('convertBtn');
+const resultValue   = document.getElementById('resultValue');
+const resultHint    = document.getElementById('resultHint');
+const messageBox    = document.getElementById('messageBox');
 const resultActions = document.getElementById('resultActions');
-const copyBtn      = document.getElementById('copyBtn');
-const shareBtn     = document.getElementById('shareBtn');
-const toast        = document.getElementById('toast');
+const copyBtn       = document.getElementById('copyBtn');
+const shareBtn      = document.getElementById('shareBtn');
+const toast         = document.getElementById('toast');
+const portraitBg    = document.getElementById('portraitBg');
+const jesterSpeech  = document.getElementById('jesterSpeech');
+const xpCountEl     = document.getElementById('xpCount');
 
+// ── Unit data ──────────────────────────────────────────────────
 const UNITS = {
   Distance: [
     { label: 'Kilometers (km)',  key: 'km', factor: 1 },
@@ -74,12 +79,12 @@ const UNITS = {
     { label: 'Atmospheres (atm)', key: 'atm', factor: 101325 },
   ],
   Energy: [
-    { label: 'Joules (J)',            key: 'j',    factor: 1 },
-    { label: 'Kilojoules (kJ)',       key: 'kj',   factor: 1000 },
-    { label: 'Calories (cal)',        key: 'cal',  factor: 4.184 },
-    { label: 'Kilocalories (kcal)',   key: 'kcal', factor: 4184 },
-    { label: 'Watt-hours (Wh)',       key: 'wh',   factor: 3600 },
-    { label: 'Kilowatt-hours (kWh)', key: 'kwh',  factor: 3600000 },
+    { label: 'Joules (J)',           key: 'j',    factor: 1 },
+    { label: 'Kilojoules (kJ)',      key: 'kj',   factor: 1000 },
+    { label: 'Calories (cal)',       key: 'cal',  factor: 4.184 },
+    { label: 'Kilocalories (kcal)', key: 'kcal', factor: 4184 },
+    { label: 'Watt-hours (Wh)',      key: 'wh',   factor: 3600 },
+    { label: 'Kilowatt-hours (kWh)',key: 'kwh',  factor: 3600000 },
   ],
   Data: [
     { label: 'Bytes (B)',      key: 'b',  factor: 1 },
@@ -92,14 +97,107 @@ const UNITS = {
 
 let currentCategory = Object.keys(UNITS)[0];
 
-// ── Helpers ────────────────────────────────────────────────────
+// ── Jester dialogue ────────────────────────────────────────────
+const JESTER = {
+  idle: [
+    "Greetings, traveler! What mysteries shall we unravel today?",
+    "Step forth! Choose your quest category and let the magic begin!",
+    "Heh heh! I await your command, brave converter of things!",
+    "The arcane arts of measurement are at your disposal, my liege!",
+  ],
+  category: {
+    Distance: "Ah, the roads of the realm! How far must we journey today?",
+    Weight:   "Mass and matter! Even my jester's cap has weight, you know…",
+    Temperature: "Hot or cold? Fire or frost? The cosmos cares not — but I do!",
+    Volume:   "How much space does your magic occupy? Let us measure the vessel!",
+    Speed:    "Fleet of foot or swift of wing — how fast does your quarry travel?",
+    Time:     "Ah, time… even I cannot convert *that* back. Heh heh! Proceed!",
+    Area:     "The breadth of kingdoms! Let us survey your domain, my liege.",
+    Pressure: "Pressure? Don't worry — I never crack under it. Heh! What's the value?",
+    Energy:   "Arcane energy flows through all things! How much courses through you?",
+    Data:     "Bytes and bits — the tongue of the digital realm! Fascinating indeed.",
+  },
+  typing: [
+    "I see the numbers forming… the spell takes shape…",
+    "Hmm… carry the one… yes… the ether stirs!",
+    "The ancient calculation awakens within the crystal!",
+    "Concentrate… the arcane conversion draws near…",
+  ],
+  success: [
+    "Behold! The oracle has spoken! Your answer is writ in starlight! ✦",
+    "Magnificent! Even my mathematical jester-brain is impressed by that one!",
+    "Heh heh! The arcane conversion is complete! You are most wise, traveler!",
+    "By the crystal spires! The calculation is done! Splendid work!",
+    "The mystical transformation is complete! The realm rejoices!",
+  ],
+  error:  "Hmm… that rune is unreadable! Enchant it with a proper number, please!",
+  swap:   "Reversing the enchantment! What was the answer becomes the question! Heh!",
+  click:  [
+    "Yes, yes! Ask and the oracle shall answer!",
+    "The spell is cast! Let the mathematics flow!",
+    "Heh heh! Witness the arcane arts at work!",
+  ],
+  copy:  "The scroll has been copied to your mystical clipboard! Well done!",
+  share: "The quest link is captured! Share it with fellow travelers of the realm!",
+  portrait: [
+    "Heh heh! Did you just poke me? The audacity! I love it!",
+    "I am THE JESTER! Mystical guide and keeper of conversions!",
+    "Careful! One more poke and I might convert YOU into a frog!",
+    "Heh heh! My ethereal form is quite touchable, isn't it?",
+    "Go on, choose a category! I don't bite… much.",
+  ],
+};
 
-function showMessage(text, isGood = true) {
-  messageBox.textContent = text;
-  messageBox.style.background = isGood ? '#e9f7ef' : '#fdecec';
-  messageBox.style.color      = isGood ? '#2c7a4b' : '#b54848';
+function pickLine(key) {
+  const lines = JESTER[key];
+  if (Array.isArray(lines)) {
+    return lines[Math.floor(Math.random() * lines.length)];
+  }
+  return lines;
 }
 
+let speakTimer;
+function jesterSpeak(line) {
+  clearTimeout(speakTimer);
+  jesterSpeech.classList.add('fading');
+  speakTimer = setTimeout(() => {
+    jesterSpeech.textContent = line;
+    jesterSpeech.classList.remove('fading');
+  }, 180);
+}
+
+function triggerAnimation(cls) {
+  portraitBg.classList.remove('celebrating', 'erroring', 'pondering');
+  void portraitBg.offsetWidth;
+  portraitBg.classList.add(cls);
+  portraitBg.addEventListener('animationend', () => {
+    portraitBg.classList.remove(cls);
+  }, { once: true });
+}
+
+// ── XP counter ─────────────────────────────────────────────────
+let questsCompleted = parseInt(localStorage.getItem('uq_quests') || '0', 10);
+xpCountEl.textContent = questsCompleted;
+
+function bumpXP() {
+  questsCompleted++;
+  localStorage.setItem('uq_quests', questsCompleted);
+  xpCountEl.textContent = questsCompleted;
+  xpCountEl.classList.remove('bump');
+  void xpCountEl.offsetWidth;
+  xpCountEl.classList.add('bump');
+  xpCountEl.addEventListener('animationend', () => xpCountEl.classList.remove('bump'), { once: true });
+}
+
+// ── Oracle status ──────────────────────────────────────────────
+function showMessage(text, state = 'neutral') {
+  messageBox.textContent = text;
+  messageBox.classList.remove('is-good', 'is-error');
+  if (state === 'good')  messageBox.classList.add('is-good');
+  if (state === 'error') messageBox.classList.add('is-error');
+}
+
+// ── Temperature ────────────────────────────────────────────────
 function convertTemperature(value, from, to) {
   if (from === to) return value;
   let celsius;
@@ -112,6 +210,7 @@ function convertTemperature(value, from, to) {
   return celsius + 273.15;
 }
 
+// ── Populate selects ───────────────────────────────────────────
 function populateUnitSelects(category) {
   const units = UNITS[category];
   [fromUnit, toUnit].forEach((sel, i) => {
@@ -128,12 +227,11 @@ function populateUnitSelects(category) {
 
 function resetResult() {
   resultValue.textContent = '—';
-  resultHint.textContent  = 'Choose units and convert.';
+  resultHint.textContent  = 'Choose units and cast the spell.';
   resultActions.hidden    = true;
 }
 
 // ── Category pills ─────────────────────────────────────────────
-
 function buildCategoryPills() {
   categoryPills.innerHTML = '';
   Object.keys(UNITS).forEach((cat) => {
@@ -159,53 +257,62 @@ function setCategory(cat) {
   });
   populateUnitSelects(cat);
   resetResult();
+  showMessage('Await the arcane calculation…');
+  jesterSpeak(JESTER.category[cat] || pickLine('idle'));
+  triggerAnimation('pondering');
   if (valueInput.value.trim()) convertValue();
 }
 
 // ── Conversion ─────────────────────────────────────────────────
-
 function convertValue() {
   const rawValue = valueInput.value.trim();
 
   if (!rawValue) {
     resetResult();
-    showMessage('Pick a category and convert!');
+    showMessage('Await the arcane calculation…');
     return;
   }
 
   const numberValue = Number(rawValue);
 
   if (!Number.isFinite(numberValue)) {
-    showMessage('Please enter a valid number.', false);
+    showMessage('That number rune is unreadable — try again!', 'error');
     resultValue.textContent = '—';
-    resultHint.textContent  = 'Try again with a number like 5 or 12.';
+    resultHint.textContent  = 'Enter a valid number.';
     resultActions.hidden    = true;
+    jesterSpeak(JESTER.error);
+    triggerAnimation('erroring');
     return;
   }
 
-  const category   = currentCategory;
   const fromKey    = fromUnit.value;
   const toKey      = toUnit.value;
-  const units      = UNITS[category];
+  const units      = UNITS[currentCategory];
   const fromUnitObj = units.find((u) => u.key === fromKey);
   const toUnitObj   = units.find((u) => u.key === toKey);
 
   let converted;
-  if (category === 'Temperature') {
+  if (currentCategory === 'Temperature') {
     converted = convertTemperature(numberValue, fromKey, toKey);
   } else {
     converted = numberValue * (fromUnitObj.factor / toUnitObj.factor);
   }
 
   const niceValue = parseFloat(converted.toPrecision(7)).toString();
+
+  // Pop animation on result
+  resultValue.classList.remove('pop');
+  void resultValue.offsetWidth;
+  resultValue.classList.add('pop');
+  resultValue.addEventListener('animationend', () => resultValue.classList.remove('pop'), { once: true });
+
   resultValue.textContent = `${niceValue} ${toUnitObj.label.split(' ')[0]}`;
   resultHint.textContent  = `${numberValue} ${fromUnitObj.label} = ${niceValue} ${toUnitObj.label}`;
-  showMessage('Conversion complete!', true);
+  showMessage('The oracle has spoken!', 'good');
   resultActions.hidden = false;
 }
 
 // ── Toast ──────────────────────────────────────────────────────
-
 let toastTimer;
 function showToast(msg) {
   toast.textContent = msg;
@@ -215,7 +322,6 @@ function showToast(msg) {
 }
 
 // ── URL state ──────────────────────────────────────────────────
-
 function getShareURL() {
   const url = new URL(location.href);
   url.search = '';
@@ -253,41 +359,85 @@ function loadURLState() {
 }
 
 // ── Init ───────────────────────────────────────────────────────
-
 loadURLState();
 
 // ── Event listeners ────────────────────────────────────────────
 
-convertBtn.addEventListener('click', convertValue);
+// Live conversion with jester typing lines
+let typingTimer;
+valueInput.addEventListener('input', () => {
+  clearTimeout(typingTimer);
+  if (valueInput.value.trim()) {
+    typingTimer = setTimeout(() => jesterSpeak(pickLine('typing')), 400);
+  }
+  convertValue();
+});
 
-valueInput.addEventListener('input', convertValue);
 valueInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') convertValue(); });
 
 fromUnit.addEventListener('change', () => { if (valueInput.value.trim()) convertValue(); });
 toUnit.addEventListener('change',   () => { if (valueInput.value.trim()) convertValue(); });
 
+// Convert button: celebrate + jester line
+convertBtn.addEventListener('click', () => {
+  const rawValue = valueInput.value.trim();
+  if (!rawValue || !Number.isFinite(Number(rawValue))) {
+    convertValue();
+    return;
+  }
+  jesterSpeak(pickLine('click'));
+  convertValue();
+  // Celebrate after a short delay (let the conversion render)
+  setTimeout(() => {
+    if (resultActions.hidden === false) {
+      jesterSpeak(pickLine('success'));
+      triggerAnimation('celebrating');
+      bumpXP();
+    }
+  }, 120);
+});
+
+// Swap button
 swapBtn.addEventListener('click', () => {
-  const tmp    = fromUnit.value;
-  fromUnit.value = toUnit.value;
-  toUnit.value   = tmp;
+  const tmp       = fromUnit.value;
+  fromUnit.value  = toUnit.value;
+  toUnit.value    = tmp;
+  jesterSpeak(JESTER.swap);
   if (valueInput.value.trim()) convertValue();
 });
 
+// Copy
 copyBtn.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(resultValue.textContent);
-    showToast('Copied!');
+    showToast('📜 Scroll copied!');
+    jesterSpeak(JESTER.copy);
   } catch {
     showToast('Copy failed — select the text manually.');
   }
 });
 
+// Share
 shareBtn.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(getShareURL());
-    showToast('Share link copied!');
+    showToast('🔗 Quest link copied!');
+    jesterSpeak(JESTER.share);
   } catch {
     showToast('Could not copy link.');
+  }
+});
+
+// Jester portrait is interactive — click for random lines
+portraitBg.addEventListener('click', () => {
+  jesterSpeak(pickLine('portrait'));
+  triggerAnimation('celebrating');
+});
+portraitBg.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    jesterSpeak(pickLine('portrait'));
+    triggerAnimation('celebrating');
   }
 });
 
@@ -296,7 +446,6 @@ categoryPills.addEventListener('keydown', (e) => {
   const pills = [...categoryPills.querySelectorAll('.cat-pill')];
   const idx   = pills.indexOf(document.activeElement);
   if (idx === -1) return;
-
   if (e.key === 'ArrowRight') {
     e.preventDefault();
     pills[(idx + 1) % pills.length].focus();

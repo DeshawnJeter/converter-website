@@ -3,58 +3,82 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Unit Quest Converter</title>
-    <meta name="description" content="Convert any unit instantly — distance, weight, temperature, volume, speed, and more. Free, fast, no ads." />
-    <meta property="og:title" content="Unit Quest Converter" />
-    <meta property="og:description" content="Convert any unit instantly across 10 categories. Free, fast, no ads." />
+    <title>Unit Quest</title>
+    <meta name="description" content="Convert any unit instantly — distance, weight, temperature, volume, speed, and more." />
+    <meta property="og:title" content="Unit Quest — Mystical Unit Converter" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <div class="panel">
 
-        <header class="panel-hero">
-          <div class="panel-hero-content">
-            <p class="eyebrow">✦ Unit Quest</p>
-            <h1>Convert any unit of measurement!</h1>
-            <p class="subtitle">Distance, weight, temperature, volume, and more.</p>
+    <div class="game-shell">
+
+      <div class="title-banner">
+        <div class="title-row">
+          <span class="title-gem">⚜</span>
+          <h1 class="game-title">UNIT QUEST</h1>
+          <span class="title-gem">⚜</span>
+        </div>
+        <p class="title-sub">A Mystical Conversion Adventure</p>
+      </div>
+
+      <div class="game-panel">
+
+        <!-- Jester companion -->
+        <div class="companion">
+          <div class="portrait-wrap">
+            <div class="portrait-bg" id="portraitBg" role="img" aria-label="The Jester — your mystical guide" tabindex="0"></div>
+            <div class="portrait-nameplate">THE JESTER</div>
           </div>
-        </header>
+          <div class="speech-bubble" aria-live="polite">
+            <p class="speech-text" id="jesterSpeech">Greetings, traveler! What mysteries shall we unravel today?</p>
+          </div>
+        </div>
 
-        <main class="panel-form">
-          <label class="field-label">Category</label>
+        <!-- Quest Type -->
+        <div class="game-section">
+          <div class="section-hd">⚔ QUEST TYPE</div>
           <div class="category-pills" id="categoryPills" role="tablist" aria-label="Conversion category"></div>
+        </div>
 
-          <label class="field-label" for="valueInput">Enter a number</label>
-          <input id="valueInput" type="number" step="any" placeholder="Example: 10" />
-
-          <label class="field-label">Convert from → to</label>
+        <!-- Offering -->
+        <div class="game-section">
+          <div class="section-hd">📜 YOUR OFFERING</div>
+          <label class="sr-only" for="valueInput">Value to convert</label>
+          <input id="valueInput" type="number" step="any" placeholder="Enter a number..." />
           <div class="unit-row">
             <select id="fromUnit" aria-label="From unit"></select>
             <button class="swap-btn" id="swapBtn" type="button" aria-label="Swap units">⇄</button>
             <select id="toUnit" aria-label="To unit"></select>
           </div>
+        </div>
 
-          <button id="convertBtn">Convert now!</button>
+        <!-- Cast button -->
+        <button id="convertBtn" type="button">✦ CAST THE SPELL ✦</button>
 
-          <div id="messageBox" class="message-box" role="status" aria-live="polite">Pick a category and convert!</div>
-
+        <!-- Oracle result -->
+        <div class="oracle-panel">
+          <div class="oracle-hd">⟁ THE ORACLE SPEAKS ⟁</div>
+          <div id="messageBox" class="oracle-status" role="status" aria-live="polite">Await the arcane calculation…</div>
           <div class="result-card">
-            <p class="result-label">Your result</p>
             <p id="resultValue" class="result-value">—</p>
-            <p id="resultHint" class="result-hint">Choose units and convert.</p>
+            <p id="resultHint" class="result-hint">Choose units and cast the spell.</p>
             <div class="result-actions" id="resultActions" hidden>
-              <button class="action-btn" id="copyBtn" type="button" aria-label="Copy result to clipboard">Copy result</button>
-              <button class="action-btn" id="shareBtn" type="button" aria-label="Copy shareable link">Share link</button>
+              <button class="action-btn" id="copyBtn" type="button" aria-label="Copy result to clipboard">📜 Copy Scroll</button>
+              <button class="action-btn" id="shareBtn" type="button" aria-label="Copy shareable link">🔗 Share Quest</button>
             </div>
           </div>
-        </main>
+        </div>
 
+      </div><!-- /.game-panel -->
+
+      <div class="xp-hud">
+        <span class="xp-label">⚔ QUESTS COMPLETED</span>
+        <span class="xp-count" id="xpCount">0</span>
       </div>
-    </div>
+
+    </div><!-- /.game-shell -->
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-
     <script src="script.js"></script>
   </body>
 </html>
