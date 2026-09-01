@@ -4,29 +4,73 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Unit Quest</title>
-    <meta name="description" content="Convert any unit instantly — distance, weight, temperature, volume, speed, and more." />
-    <meta property="og:title" content="Unit Quest — Mystical Unit Converter" />
+    <meta name="description" content="An adventure quest game that teaches unit conversion math." />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
 
-    <div class="game-shell">
-
-      <div class="title-banner">
-        <div class="title-row">
-          <span class="title-gem">⚜</span>
-          <h1 class="game-title">UNIT QUEST</h1>
-          <span class="title-gem">⚜</span>
+    <!-- ══════════════════════════════════════════════════════════
+         SCREEN 1 — TITLE
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="screen-title" class="screen active">
+      <div class="title-hero">
+        <div class="title-hero-overlay"></div>
+        <div class="title-hero-content">
+          <div class="title-row">
+            <span class="title-gem">⚜</span>
+            <h1 class="game-title">UNIT QUEST</h1>
+            <span class="title-gem">⚜</span>
+          </div>
+          <p class="title-sub">The Arcane Academy of Measurement</p>
         </div>
-        <p class="title-sub">A Mystical Conversion Adventure</p>
+      </div>
+      <div class="title-body">
+        <p class="title-quote" id="titleQuote">
+          "Enter the realm where numbers transform and knowledge is power, traveler!"
+        </p>
+        <div class="title-actions">
+          <button class="btn-cta" id="beginQuestBtn">⚔ BEGIN QUEST</button>
+          <button class="btn-cta-ghost" id="freePracticeBtn">🔮 FREE PRACTICE</button>
+        </div>
+        <div class="title-gold">
+          <span class="title-gold-label">💰 TOTAL GOLD</span>
+          <span class="title-gold-val" id="titleGold">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SCREEN 2 — REALM MAP
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="screen-realm" class="screen">
+      <div class="screen-topbar">
+        <button class="back-btn" id="realmBackBtn">← BACK</button>
+        <h2 class="screen-heading">⚔ CHOOSE YOUR REALM</h2>
+        <div class="topbar-gold">💰 <span id="realmGold">0</span></div>
+      </div>
+      <p class="realm-intro">Complete quests to earn Gold and unlock new realms.</p>
+      <div class="realm-grid" id="realmGrid"></div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SCREEN 3 — QUEST / FREE PRACTICE
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="screen-quest" class="screen">
+
+      <!-- Quest HUD (quest mode only) -->
+      <div class="quest-hud" id="questHud" hidden>
+        <div class="hud-lives" id="hudLives">❤️❤️❤️</div>
+        <div class="hud-center" id="hudCenter">Quest 1 of 5</div>
+        <div class="hud-gold-run">💰 <span id="hudGold">0</span></div>
       </div>
 
-      <div class="game-panel">
+      <div class="game-panel" id="mainGamePanel">
 
-        <!-- Jester companion -->
+        <!-- Companion -->
         <div class="companion">
           <div class="portrait-wrap">
-            <div class="portrait-bg" id="portraitBg" role="img" aria-label="The Jester — your mystical guide" tabindex="0"></div>
+            <div class="portrait-bg" id="portraitBg" role="img"
+                 aria-label="The Jester — your mystical guide" tabindex="0"></div>
             <div class="portrait-nameplate">THE JESTER</div>
           </div>
           <div class="speech-bubble" aria-live="polite">
@@ -34,17 +78,23 @@
           </div>
         </div>
 
-        <!-- Quest Type -->
-        <div class="game-section">
+        <!-- Quest narrative (quest mode only) -->
+        <div class="quest-narrative" id="questNarrative" hidden>
+          <div class="quest-story" id="questStory"></div>
+          <div class="quest-challenge" id="questChallenge"></div>
+        </div>
+
+        <!-- Category pills (free mode only) -->
+        <div class="game-section" id="categorySec">
           <div class="section-hd">⚔ QUEST TYPE</div>
           <div class="category-pills" id="categoryPills" role="tablist" aria-label="Conversion category"></div>
         </div>
 
-        <!-- Offering -->
+        <!-- Offering (shared) -->
         <div class="game-section">
-          <div class="section-hd">📜 YOUR OFFERING</div>
+          <div class="section-hd" id="offeringHd">📜 YOUR OFFERING</div>
           <label class="sr-only" for="valueInput">Value to convert</label>
-          <input id="valueInput" type="number" step="any" placeholder="Enter a number..." />
+          <input id="valueInput" type="number" step="any" placeholder="Enter a number…" />
           <div class="unit-row">
             <select id="fromUnit" aria-label="From unit"></select>
             <button class="swap-btn" id="swapBtn" type="button" aria-label="Swap units">⇄</button>
@@ -52,31 +102,94 @@
           </div>
         </div>
 
-        <!-- Cast button -->
+        <!-- Free mode convert button -->
         <button id="convertBtn" type="button">✦ CAST THE SPELL ✦</button>
 
-        <!-- Oracle result -->
+        <!-- Quest mode: submit + hint -->
+        <div class="quest-btns" id="questBtns" hidden>
+          <button id="questSubmitBtn" type="button" class="quest-submit-btn">⚔ SUBMIT ANSWER</button>
+          <button id="hintBtn" type="button" class="hint-btn">
+            💡 HINT <span id="hintCountDisplay">(2 left)</span>
+          </button>
+        </div>
+
+        <!-- Oracle (shared) -->
         <div class="oracle-panel">
           <div class="oracle-hd">⟁ THE ORACLE SPEAKS ⟁</div>
-          <div id="messageBox" class="oracle-status" role="status" aria-live="polite">Await the arcane calculation…</div>
+          <div id="messageBox" class="oracle-status" role="status" aria-live="polite">
+            Await the arcane calculation…
+          </div>
           <div class="result-card">
             <p id="resultValue" class="result-value">—</p>
             <p id="resultHint" class="result-hint">Choose units and cast the spell.</p>
             <div class="result-actions" id="resultActions" hidden>
-              <button class="action-btn" id="copyBtn" type="button" aria-label="Copy result to clipboard">📜 Copy Scroll</button>
-              <button class="action-btn" id="shareBtn" type="button" aria-label="Copy shareable link">🔗 Share Quest</button>
+              <button class="action-btn" id="copyBtn" type="button">📜 Copy Scroll</button>
+              <button class="action-btn" id="shareBtn" type="button">🔗 Share Quest</button>
             </div>
           </div>
         </div>
 
       </div><!-- /.game-panel -->
 
-      <div class="xp-hud">
+      <!-- Free mode XP hud -->
+      <div class="xp-hud" id="xpHud">
         <span class="xp-label">⚔ QUESTS COMPLETED</span>
         <span class="xp-count" id="xpCount">0</span>
       </div>
 
-    </div><!-- /.game-shell -->
+      <!-- Quest exit (quest mode only) -->
+      <button class="exit-quest-btn" id="exitQuestBtn" hidden>✕ Exit Quest</button>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SCREEN 4 — FEEDBACK
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="screen-feedback" class="screen">
+      <div class="feedback-wrap">
+        <div class="feedback-verdict" id="feedbackVerdict">✅</div>
+        <div class="feedback-reveal" id="feedbackReveal"></div>
+        <div class="formula-box" id="formulaBox">
+          <div class="formula-title">⟁ THE ARCANE FORMULA</div>
+          <div class="formula-content" id="formulaContent"></div>
+        </div>
+        <div class="companion feedback-companion">
+          <div class="portrait-mini" id="portraitMini"></div>
+          <div class="speech-bubble">
+            <p class="speech-text" id="feedbackSpeech">Well done, traveler!</p>
+          </div>
+        </div>
+        <div class="gold-badge" id="goldBadge">+10 💰</div>
+        <button class="btn-cta" id="nextQuestBtn">NEXT QUEST →</button>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SCREEN 5 — REALM COMPLETE
+    ══════════════════════════════════════════════════════════════ -->
+    <section id="screen-complete" class="screen">
+      <div class="complete-wrap">
+        <div class="complete-banner">
+          <span class="complete-icon" id="completeIcon">🗺️</span>
+          <h2 class="complete-realm" id="completeRealmName">The Road to the Crystal Citadel</h2>
+          <p class="complete-label">REALM COMPLETE!</p>
+        </div>
+        <div class="star-row" id="starRow">
+          <span class="star" id="star1">☆</span>
+          <span class="star" id="star2">☆</span>
+          <span class="star" id="star3">☆</span>
+        </div>
+        <div class="complete-stats">
+          <div class="cstat"><span class="cstat-label">Gold Earned</span><span class="cstat-val" id="completeGold">0 💰</span></div>
+          <div class="cstat"><span class="cstat-label">Accuracy</span><span class="cstat-val" id="completeAccuracy">—</span></div>
+          <div class="cstat"><span class="cstat-label">Best Streak</span><span class="cstat-val" id="completeStreak">0 🔥</span></div>
+        </div>
+        <div class="complete-actions">
+          <button class="btn-cta" id="playAgainBtn">⚔ PLAY AGAIN</button>
+          <button class="btn-cta-ghost" id="chooseRealmBtn">🗺️ CHOOSE REALM</button>
+        </div>
+      </div>
+    </section>
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
     <script src="script.js"></script>
