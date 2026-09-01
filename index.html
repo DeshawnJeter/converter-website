@@ -11,40 +11,46 @@
   </head>
   <body>
     <div class="app-shell">
-      <header class="hero-card">
-        <p class="eyebrow">✦ Unit Converter</p>
-        <h1>Convert any unit of measurement!</h1>
-        <p class="subtitle">Distance, weight, temperature, volume, and more.</p>
-      </header>
+      <div class="panel">
 
-      <main class="converter-card">
-        <label class="field-label">Category</label>
-        <div class="category-pills" id="categoryPills" role="tablist" aria-label="Conversion category"></div>
-
-        <label class="field-label" for="valueInput">Enter a number</label>
-        <input id="valueInput" type="number" step="any" placeholder="Example: 10" />
-
-        <label class="field-label">Convert from → to</label>
-        <div class="unit-row">
-          <select id="fromUnit" aria-label="From unit"></select>
-          <button class="swap-btn" id="swapBtn" type="button" aria-label="Swap units">⇄</button>
-          <select id="toUnit" aria-label="To unit"></select>
-        </div>
-
-        <button id="convertBtn">Convert now!</button>
-
-        <div id="messageBox" class="message-box" role="status" aria-live="polite">Pick a category and convert!</div>
-
-        <div class="result-card">
-          <p class="result-label">Your result</p>
-          <p id="resultValue" class="result-value">—</p>
-          <p id="resultHint" class="result-hint">Choose units and convert.</p>
-          <div class="result-actions" id="resultActions" hidden>
-            <button class="action-btn" id="copyBtn" type="button" aria-label="Copy result to clipboard">Copy result</button>
-            <button class="action-btn" id="shareBtn" type="button" aria-label="Copy shareable link">Share link</button>
+        <header class="panel-hero">
+          <div class="panel-hero-content">
+            <p class="eyebrow">✦ Unit Quest</p>
+            <h1>Convert any unit of measurement!</h1>
+            <p class="subtitle">Distance, weight, temperature, volume, and more.</p>
           </div>
-        </div>
-      </main>
+        </header>
+
+        <main class="panel-form">
+          <label class="field-label">Category</label>
+          <div class="category-pills" id="categoryPills" role="tablist" aria-label="Conversion category"></div>
+
+          <label class="field-label" for="valueInput">Enter a number</label>
+          <input id="valueInput" type="number" step="any" placeholder="Example: 10" />
+
+          <label class="field-label">Convert from → to</label>
+          <div class="unit-row">
+            <select id="fromUnit" aria-label="From unit"></select>
+            <button class="swap-btn" id="swapBtn" type="button" aria-label="Swap units">⇄</button>
+            <select id="toUnit" aria-label="To unit"></select>
+          </div>
+
+          <button id="convertBtn">Convert now!</button>
+
+          <div id="messageBox" class="message-box" role="status" aria-live="polite">Pick a category and convert!</div>
+
+          <div class="result-card">
+            <p class="result-label">Your result</p>
+            <p id="resultValue" class="result-value">—</p>
+            <p id="resultHint" class="result-hint">Choose units and convert.</p>
+            <div class="result-actions" id="resultActions" hidden>
+              <button class="action-btn" id="copyBtn" type="button" aria-label="Copy result to clipboard">Copy result</button>
+              <button class="action-btn" id="shareBtn" type="button" aria-label="Copy shareable link">Share link</button>
+            </div>
+          </div>
+        </main>
+
+      </div>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>

@@ -1,102 +1,127 @@
 :root {
-  --primary: #a855f7;
-  --primary-dark: #7c3aed;
-  --primary-glow: rgba(168, 85, 247, 0.5);
-  --accent: #818cf8;
-  --text: #f1f5f9;
-  --muted: #94a3b8;
-  --card-bg: rgba(10, 5, 20, 0.65);
+  --bg:          #07040f;
+  --primary:     #a855f7;
+  --primary-dark:#7c3aed;
+  --primary-glow:rgba(168, 85, 247, 0.5);
+  --accent:      #818cf8;
+  --text:        #f1f5f9;
+  --muted:       #94a3b8;
+  --card-bg:     rgba(7, 4, 15, 0.8);
   --card-border: rgba(168, 85, 247, 0.25);
-  --good: #34d399;
-  --danger: #f87171;
+  --good:        #34d399;
+  --danger:      #f87171;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 [hidden] { display: none !important; }
 
 body {
   margin: 0;
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-  background: url('bg.png') center center / cover no-repeat fixed;
+  background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   display: grid;
-  place-items: center;
-  padding: 20px;
+  place-items: center start;
+  padding: 32px 20px 48px;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 0, 15, 0.45);
-  pointer-events: none;
-  z-index: 0;
-}
+/* ── App shell ──────────────────────────────────────────────── */
 
 .app-shell {
+  width: min(100%, 620px);
+  margin: 0 auto;
+}
+
+/* ── Unified panel ──────────────────────────────────────────── */
+
+.panel {
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.05),
+    0 0 60px rgba(168, 85, 247, 0.18),
+    0 32px 80px rgba(0, 0, 0, 0.85);
+}
+
+/* ── Hero: bg.png is structural, not wallpaper ──────────────── */
+
+.panel-hero {
+  position: relative;
+  height: 310px;
+  background: url('bg.png') center 16% / cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Gradient overlay: let the image breathe at top, fade to #07040f */
+.panel-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 4, 15, 0.05) 0%,
+    rgba(7, 4, 15, 0.15) 30%,
+    rgba(7, 4, 15, 0.72) 65%,
+    rgba(7, 4, 15, 1.00) 100%
+  );
+  pointer-events: none;
+}
+
+.panel-hero-content {
   position: relative;
   z-index: 1;
-  width: min(100%, 620px);
-  display: grid;
-  gap: 16px;
-}
-
-.hero-card,
-.converter-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 24px;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow:
-    0 0 40px rgba(168, 85, 247, 0.15),
-    0 16px 48px rgba(0, 0, 0, 0.6);
-}
-
-.hero-card {
-  padding: 24px;
+  padding: 0 28px 24px;
 }
 
 .eyebrow {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   font-weight: 700;
   color: var(--primary);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  text-shadow: 0 0 12px var(--primary-glow);
+  font-size: 0.78rem;
+  text-shadow: 0 0 14px var(--primary-glow);
 }
 
 h1 {
-  margin: 0 0 8px;
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 6px;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
   color: #fff;
-  text-shadow: 0 0 24px rgba(168, 85, 247, 0.6);
+  text-shadow: 0 0 28px rgba(168, 85, 247, 0.7), 0 2px 8px rgba(0,0,0,0.6);
 }
 
 .subtitle {
   margin: 0;
   color: var(--muted);
+  font-size: 0.9rem;
   line-height: 1.5;
 }
 
-.converter-card {
-  padding: 24px;
+/* ── Form area: seamlessly emerges from hero fade ───────────── */
+
+.panel-form {
+  background: var(--bg);
+  padding: 20px 24px 28px;
   display: grid;
   gap: 12px;
 }
 
+/* ── Field labels ────────────────────────────────────────────── */
+
 .field-label {
   font-weight: 700;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+
+/* ── Inputs & selects ────────────────────────────────────────── */
 
 input,
 select {
@@ -123,13 +148,13 @@ select option {
   color: var(--text);
 }
 
-/* ── Category pills ────────────────────────────────────────── */
+/* ── Category pills ──────────────────────────────────────────── */
 
 .category-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .cat-pill {
@@ -139,9 +164,9 @@ select option {
   background: rgba(10, 5, 25, 0.5);
   color: var(--muted);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  padding: 6px 14px;
+  padding: 5px 13px;
   cursor: pointer;
   letter-spacing: 0.03em;
   box-shadow: none;
@@ -171,7 +196,7 @@ select option {
   outline-offset: 2px;
 }
 
-/* ── Convert button (keep full-width, separate from pills) ── */
+/* ── Convert button ──────────────────────────────────────────── */
 
 #convertBtn {
   width: 100%;
@@ -198,7 +223,7 @@ select option {
   outline-offset: 2px;
 }
 
-/* ── Unit row with swap button ──────────────────────────────── */
+/* ── Unit row with swap button ───────────────────────────────── */
 
 .unit-row {
   display: grid;
@@ -221,9 +246,7 @@ select option {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: none;
-  letter-spacing: 0;
-  transition: border-color 0.15s, background 0.15s, transform 0.15s, box-shadow 0.2s;
+  transition: border-color 0.15s, background 0.15s, transform 0.2s, box-shadow 0.2s;
   text-shadow: 0 0 10px var(--primary-glow);
 }
 
@@ -238,7 +261,7 @@ select option {
   outline-offset: 2px;
 }
 
-/* ── Message box ────────────────────────────────────────────── */
+/* ── Message box ─────────────────────────────────────────────── */
 
 .message-box {
   padding: 12px;
@@ -247,15 +270,15 @@ select option {
   border: 1px solid var(--card-border);
   color: var(--muted);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
-/* ── Result card ────────────────────────────────────────────── */
+/* ── Result card ─────────────────────────────────────────────── */
 
 .result-card {
   padding: 20px 16px;
-  background: rgba(88, 28, 135, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(88, 28, 135, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.28);
   border-radius: 16px;
   text-align: center;
 }
@@ -263,7 +286,7 @@ select option {
 .result-label {
   margin: 0 0 6px;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -279,10 +302,10 @@ select option {
 .result-hint {
   margin: 6px 0 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
-/* ── Result action buttons ──────────────────────────────────── */
+/* ── Result actions ──────────────────────────────────────────── */
 
 .result-actions {
   display: flex;
@@ -298,17 +321,15 @@ select option {
   background: rgba(10, 5, 25, 0.5);
   color: var(--muted);
   font: inherit;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  padding: 7px 16px;
+  padding: 6px 16px;
   cursor: pointer;
   letter-spacing: 0.03em;
-  box-shadow: none;
   transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
 .action-btn:hover {
-  transform: none;
   border-color: var(--primary);
   color: var(--text);
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
@@ -319,7 +340,7 @@ select option {
   outline-offset: 2px;
 }
 
-/* ── Toast notification ─────────────────────────────────────── */
+/* ── Toast ───────────────────────────────────────────────────── */
 
 .toast {
   position: fixed;
@@ -346,28 +367,25 @@ select option {
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
+/* ── Responsive ──────────────────────────────────────────────── */
 
 @media (max-width: 480px) {
-  body {
-    padding: 12px;
-  }
+  body { padding: 16px 12px 40px; }
 
-  .hero-card,
-  .converter-card {
-    border-radius: 18px;
-  }
+  .panel { border-radius: 20px; }
 
-  select {
-    min-height: 44px;
-  }
+  .panel-hero { height: 240px; }
+
+  .panel-hero-content { padding: 0 18px 20px; }
+
+  .panel-form { padding: 16px 16px 24px; }
+
+  select { min-height: 44px; }
 
   .result-actions {
     flex-direction: column;
     align-items: center;
   }
 
-  .action-btn {
-    width: 100%;
-  }
+  .action-btn { width: 100%; }
 }
