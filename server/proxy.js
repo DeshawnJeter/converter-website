@@ -40,6 +40,7 @@ function createParser({ callModel, units, rules = null, now = Date.now, limit = 
 const STATIC = {
   '/': ['index.html', 'text/html'], '/index.html': ['index.html', 'text/html'],
   '/script.js': ['script.js', 'text/javascript'], '/nlparse.js': ['nlparse.js', 'text/javascript'],
+  '/lib/rules.js': ['lib/rules.js', 'text/javascript'],
   '/styles.css': ['styles.css', 'text/css'], '/bg.png': ['bg.png', 'image/png'],
 };
 

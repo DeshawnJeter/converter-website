@@ -48,3 +48,11 @@ Misses: 3 typos returned unusable output ("mies", "ponds", "meers"; safely rejec
 ## Outcome
 Do not make B the default. Keep `?ai=1` off by default. The model beats rules on typos and chatty phrasing, at about 1.2 s per call.
 Next experiments (not run): hybrid (rules first, model only on refusal; the 1.2 s cost then applies to a minority of requests) and a smaller, faster model. One run only, no repeats; the temperature setting is omitted because the API rejects it for this model, so runs are not guaranteed identical.
+
+## Key-free option: smarter rules (`?ask=1`), added 2026-11-07
+No model, no server, no API key; runs in the browser, even from the file. The rules parser now fixes typos (closest unit within 1 edit for short words, 2 for long ones, and only when exactly one unit is closest) and strips filler from chatty sentences.
+
+- Tuned set (92 cases; I tuned against its misses, so this is optimistic): 100% accuracy on normal, typo, and edge cases; 0 wrong accepted; 0 of 16 must-refuse accepted; sub-millisecond.
+- Held-out set (`experiments/holdout.js`, 16 cases written after tuning): 9 of 12 answerable correct (75%); 4 of 4 refusals correct; 0 wrong accepted. Misses: transposed letters ("miels"), a long sentence ("how fast is that"), and an unlisted word ("kilos").
+- Trade-off: free, private, instant, and safe to refuse, but only as smart as its alias list. The model path (`?ai=1`) stays the option for open-ended phrasing, with the two failed criteria above.
+- With rules now answering more, the hybrid's offline estimate is 16 of 92 cases (17.4%) reaching the model: only the must-refuse cases.

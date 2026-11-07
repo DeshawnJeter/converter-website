@@ -1025,9 +1025,11 @@ document.getElementById('chooseRealmBtn').addEventListener('click', () => {
   showScreen('screen-realm');
 });
 
-// ── Optional "ask in words" box (off unless ?ai=1) ─────────────
-(function initAIParse() {
-  if (typeof NLParse === 'undefined' || !NLParse.enabled(location.search)) return;
+// ── Optional "ask in words" box: ?ask=1 (local, no server, no key) or ?ai=1 (server + model) ──
+(function initAsk() {
+  const mode = typeof NLParse !== 'undefined' ? NLParse.mode(location.search) : null;
+  if (!mode || (mode === 'local' && typeof NLRules === 'undefined')) return;
+  const rules = mode === 'local' ? NLRules.makeRulesParser(UNITS) : null;
   const wrap = document.createElement('div');
   wrap.style.cssText = 'display:flex;gap:8px;margin:8px 0';
   const input = document.createElement('input');
@@ -1038,11 +1040,8 @@ document.getElementById('chooseRealmBtn').addEventListener('click', () => {
   wrap.append(input, btn);
   convertBtn.parentNode.insertBefore(wrap, convertBtn);
 
-  async function ask() {
-    const qn = document.getElementById('questNarrative');
-    if (qn && !qn.hidden) { showMessage('Finish the quest first.', 'error'); return; }
-    const text = NLParse.sanitizeInput(input.value);
-    if (!text) { showMessage('Type a conversion first.', 'error'); return; }
+  async function getParsed(text) {
+    if (rules) { const r = rules(text); return r.parsed ? NLParse.validate(r.parsed, UNITS) : { ok: false }; }
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 5000);
     try {
@@ -1051,7 +1050,17 @@ document.getElementById('chooseRealmBtn').addEventListener('click', () => {
         body: JSON.stringify({ text }), signal: ctrl.signal,
       });
       const data = await res.json();
-      const v = data.parsed ? NLParse.validate(data.parsed, UNITS) : { ok: false };
+      return data.parsed ? NLParse.validate(data.parsed, UNITS) : { ok: false };
+    } finally { clearTimeout(timer); }
+  }
+
+  async function ask() {
+    const qn = document.getElementById('questNarrative');
+    if (qn && !qn.hidden) { showMessage('Finish the quest first.', 'error'); return; }
+    const text = NLParse.sanitizeInput(input.value);
+    if (!text) { showMessage('Type a conversion first.', 'error'); return; }
+    try {
+      const v = await getParsed(text);
       if (!v.ok) { showMessage('I could not read that. Use the form below.', 'error'); return; }
       const p = v.parsed;
       setCategory(p.category);
@@ -1059,7 +1068,7 @@ document.getElementById('chooseRealmBtn').addEventListener('click', () => {
       convertValue();
     } catch (e) {
       showMessage('Ask is unavailable. Use the form below.', 'error');
-    } finally { clearTimeout(timer); }
+    }
   }
   btn.addEventListener('click', ask);
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') ask(); });

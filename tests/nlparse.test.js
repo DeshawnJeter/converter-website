@@ -89,7 +89,7 @@ test('hybrid: rules answer clean requests with no model call; typos go to the mo
   assert.strictEqual(r.body.source, 'rules');
   assert.strictEqual(r.body.parsed.to, 'mi');
   assert.strictEqual(calls, 0);
-  await p('ip', '5 kiometers to miles');
+  await p('ip', 'convert it please');
   assert.strictEqual(calls, 1);
 });
 

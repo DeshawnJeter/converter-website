@@ -4,6 +4,7 @@
   else root.NLParse = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   function enabled(search) { return new URLSearchParams(search || '').get('ai') === '1'; }
+  function mode(search) { const p = new URLSearchParams(search || ''); return p.get('ai') === '1' ? 'ai' : p.get('ask') === '1' ? 'local' : null; }
 
   function sanitizeInput(text) {
     return String(text == null ? '' : text).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, 200);
@@ -45,5 +46,5 @@
     return { ok: true, parsed: { category: obj.category, from: obj.from, to: obj.to, value: obj.value } };
   }
 
-  return { enabled, sanitizeInput, wrapUser, buildSystem, parseModelOutput, validate };
+  return { enabled, mode, sanitizeInput, wrapUser, buildSystem, parseModelOutput, validate };
 });

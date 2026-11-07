@@ -11,3 +11,4 @@ Open the index.html file in your browser.
 - `node experiments/run.js A` runs the no-AI baseline. `node experiments/run.js B` runs the model arm (needs a key).
 - `node tools/gen-stories.js <Category>` drafts new quest stories into `stories/pending/` (needs a key). A person must approve them.
 - Decisions: `docs/decisions/`.
+- No key needed: open the page with `?ask=1` (works straight from `index.html`) for an "ask in words" box that uses built-in rules, including typo tolerance.
