@@ -24,7 +24,7 @@ const xpCountEl     = document.getElementById('xpCount');
 const UNITS = {
   Distance: [
     { label: 'Kilometers (km)',  key: 'km', factor: 1 },
-    { label: 'Miles (mi)',       key: 'mi', factor: 1.60934 },
+    { label: 'Miles (mi)',       key: 'mi', factor: 1.609344 },
     { label: 'Meters (m)',       key: 'm',  factor: 0.001 },
     { label: 'Centimeters (cm)', key: 'cm', factor: 0.00001 },
     { label: 'Feet (ft)',        key: 'ft', factor: 0.0003048 },
@@ -33,10 +33,10 @@ const UNITS = {
   ],
   Weight: [
     { label: 'Kilograms (kg)', key: 'kg', factor: 1 },
-    { label: 'Pounds (lb)',    key: 'lb', factor: 0.453592 },
+    { label: 'Pounds (lb)',    key: 'lb', factor: 0.45359237 },
     { label: 'Grams (g)',      key: 'g',  factor: 0.001 },
-    { label: 'Ounces (oz)',    key: 'oz', factor: 0.0283495 },
-    { label: 'Stone (st)',     key: 'st', factor: 6.35029 },
+    { label: 'Ounces (oz)',    key: 'oz', factor: 0.028349523125 },
+    { label: 'Stone (st)',     key: 'st', factor: 6.35029318 },
   ],
   Temperature: [
     { label: 'Celsius (°C)',    key: 'c' },
@@ -46,16 +46,16 @@ const UNITS = {
   Volume: [
     { label: 'Liters (L)',           key: 'l',    factor: 1 },
     { label: 'Milliliters (mL)',     key: 'ml',   factor: 0.001 },
-    { label: 'US Gallons (gal)',     key: 'gal',  factor: 3.78541 },
-    { label: 'Fluid Ounces (fl oz)',key: 'floz', factor: 0.0295735 },
-    { label: 'Cups',                 key: 'cup',  factor: 0.236588 },
-    { label: 'Pints (pt)',           key: 'pt',   factor: 0.473176 },
-    { label: 'Quarts (qt)',          key: 'qt',   factor: 0.946353 },
+    { label: 'US Gallons (gal)',     key: 'gal',  factor: 3.785411784 },
+    { label: 'Fluid Ounces (fl oz)',key: 'floz', factor: 0.0295735295625 },
+    { label: 'Cups',                 key: 'cup',  factor: 0.2365882365 },
+    { label: 'Pints (pt)',           key: 'pt',   factor: 0.473176473 },
+    { label: 'Quarts (qt)',          key: 'qt',   factor: 0.946352946 },
   ],
   Speed: [
     { label: 'km/h',  key: 'kmh',  factor: 1 },
-    { label: 'mph',   key: 'mph',  factor: 1.60934 },
-    { label: 'm/s',   key: 'ms',   factor: 0.0036 },
+    { label: 'mph',   key: 'mph',  factor: 1.609344 },
+    { label: 'm/s',   key: 'ms',   factor: 3.6 },
     { label: 'Knots', key: 'knot', factor: 1.852 },
   ],
   Time: [
@@ -69,17 +69,17 @@ const UNITS = {
   ],
   Area: [
     { label: 'Square Meters (m²)', key: 'm2',  factor: 1 },
-    { label: 'Square Feet (ft²)',  key: 'ft2', factor: 0.092903 },
-    { label: 'Acres',              key: 'ac',  factor: 4046.86 },
+    { label: 'Square Feet (ft²)',  key: 'ft2', factor: 0.09290304 },
+    { label: 'Acres',              key: 'ac',  factor: 4046.8564224 },
     { label: 'Hectares (ha)',      key: 'ha',  factor: 10000 },
     { label: 'Square km (km²)',    key: 'km2', factor: 1e6 },
-    { label: 'Square Miles (mi²)', key: 'mi2', factor: 2589988 },
+    { label: 'Square Miles (mi²)', key: 'mi2', factor: 2589988.110336 },
   ],
   Pressure: [
     { label: 'Pascals (Pa)',      key: 'pa',  factor: 1 },
     { label: 'Kilopascals (kPa)', key: 'kpa', factor: 1000 },
     { label: 'Bar',               key: 'bar', factor: 100000 },
-    { label: 'PSI',               key: 'psi', factor: 6894.76 },
+    { label: 'PSI',               key: 'psi', factor: 6894.757293168 },
     { label: 'Atmospheres (atm)', key: 'atm', factor: 101325 },
   ],
   Energy: [
