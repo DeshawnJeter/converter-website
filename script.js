@@ -726,6 +726,22 @@ function startRealm(category) {
 }
 
 // ── Load a quest ───────────────────────────────────────────────
+// Safe story rendering: only <strong>…</strong> becomes bold; any other markup stays plain text.
+function splitStory(text) {
+  return String(text).split(/(<strong>[^<]*<\/strong>)/g).filter(Boolean).map((part) => {
+    const m = part.match(/^<strong>([^<]*)<\/strong>$/);
+    return m ? { strong: true, text: m[1] } : { strong: false, text: part };
+  });
+}
+
+function renderStory(el, text) {
+  el.textContent = '';
+  splitStory(text).forEach((p) => {
+    if (p.strong) { const s = document.createElement('strong'); s.textContent = p.text; el.appendChild(s); }
+    else el.appendChild(document.createTextNode(p.text));
+  });
+}
+
 function loadQuest(quest) {
   GAME.quest = quest;
   quest.attempts = 0;
@@ -742,7 +758,7 @@ function loadQuest(quest) {
   showMessage('Enter the value from the story and watch the oracle reveal your answer…');
 
   // Show narrative
-  document.getElementById('questStory').innerHTML    = quest.narrative;
+  renderStory(document.getElementById('questStory'), quest.narrative);
   document.getElementById('questChallenge').textContent =
     `${quest.value} ${quest.fromUnit.label.split('(')[0].trim()} → ? ${quest.toUnit.label.split('(')[0].trim()}`;
   document.getElementById('questNarrative').hidden = false;
