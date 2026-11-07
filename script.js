@@ -1024,3 +1024,43 @@ document.getElementById('chooseRealmBtn').addEventListener('click', () => {
   buildRealmGrid();
   showScreen('screen-realm');
 });
+
+// ── Optional "ask in words" box (off unless ?ai=1) ─────────────
+(function initAIParse() {
+  if (typeof NLParse === 'undefined' || !NLParse.enabled(location.search)) return;
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'display:flex;gap:8px;margin:8px 0';
+  const input = document.createElement('input');
+  input.type = 'text'; input.maxLength = 200; input.placeholder = 'Or ask in words: 750 ml to cups';
+  input.setAttribute('aria-label', 'Ask in words'); input.style.flex = '1';
+  const btn = document.createElement('button');
+  btn.type = 'button'; btn.textContent = 'Ask';
+  wrap.append(input, btn);
+  convertBtn.parentNode.insertBefore(wrap, convertBtn);
+
+  async function ask() {
+    const qn = document.getElementById('questNarrative');
+    if (qn && !qn.hidden) { showMessage('Finish the quest first.', 'error'); return; }
+    const text = NLParse.sanitizeInput(input.value);
+    if (!text) { showMessage('Type a conversion first.', 'error'); return; }
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 5000);
+    try {
+      const res = await fetch('/api/parse', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ text }), signal: ctrl.signal,
+      });
+      const data = await res.json();
+      const v = data.parsed ? NLParse.validate(data.parsed, UNITS) : { ok: false };
+      if (!v.ok) { showMessage('I could not read that. Use the form below.', 'error'); return; }
+      const p = v.parsed;
+      setCategory(p.category);
+      fromUnit.value = p.from; toUnit.value = p.to; valueInput.value = String(p.value);
+      convertValue();
+    } catch (e) {
+      showMessage('Ask is unavailable. Use the form below.', 'error');
+    } finally { clearTimeout(timer); }
+  }
+  btn.addEventListener('click', ask);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') ask(); });
+})();

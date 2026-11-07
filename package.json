@@ -1,0 +1,8 @@
+{
+  "name": "converter-website",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "start": "node server/proxy.js"
+  }
+}
