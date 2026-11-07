@@ -1,0 +1,112 @@
+{
+  "summary": {
+    "arm": "A",
+    "model": null,
+    "cases": 92,
+    "accuracy_pct": 85.5,
+    "accuracy_by_kind": {
+      "normal": 100,
+      "typo": 0,
+      "edge": 83.3
+    },
+    "wrong_accepted": 0,
+    "refusal_cases": 16,
+    "fail_open": 0,
+    "refusals_correct_pct": 100,
+    "latency_ms": {
+      "p50": 0.01,
+      "p95": 0.103
+    },
+    "tokens": null
+  },
+  "misses": [
+    {
+      "id": 61,
+      "kind": "typo",
+      "text": "5 kiometers to miles",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 62,
+      "kind": "typo",
+      "text": "26.2 mies to kilometers",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 63,
+      "kind": "typo",
+      "text": "150 ponds to kilograms",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 64,
+      "kind": "typo",
+      "text": "70 kiograms to pounds",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 65,
+      "kind": "typo",
+      "text": "750 mililiters to cups",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 66,
+      "kind": "typo",
+      "text": "3 galons to liters",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 67,
+      "kind": "typo",
+      "text": "100 cesius to fahrenheit",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 68,
+      "kind": "typo",
+      "text": "98.6 farenheit to celsius",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 69,
+      "kind": "typo",
+      "text": "60 mies per hour to kilometers per hour",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 70,
+      "kind": "typo",
+      "text": "10 meers per second to kilometers per hour",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 76,
+      "kind": "edge",
+      "text": "i weigh 150 pounds, what is that in kilograms",
+      "got": {
+        "refused": true
+      }
+    }
+  ]
+}
