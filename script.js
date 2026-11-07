@@ -1031,13 +1031,18 @@ document.getElementById('chooseRealmBtn').addEventListener('click', () => {
   if (!mode || (mode === 'local' && typeof NLRules === 'undefined')) return;
   const rules = mode === 'local' ? NLRules.makeRulesParser(UNITS) : null;
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'display:flex;gap:8px;margin:8px 0';
+  wrap.className = 'game-section ask-section';
+  const hd = document.createElement('div');
+  hd.className = 'section-hd'; hd.textContent = '💬 ASK IN WORDS';
+  const row = document.createElement('div');
+  row.className = 'ask-row';
   const input = document.createElement('input');
-  input.type = 'text'; input.maxLength = 200; input.placeholder = 'Or ask in words: 750 ml to cups';
-  input.setAttribute('aria-label', 'Ask in words'); input.style.flex = '1';
+  input.type = 'text'; input.maxLength = 200; input.placeholder = '750 ml to cups…';
+  input.setAttribute('aria-label', 'Ask in words');
   const btn = document.createElement('button');
-  btn.type = 'button'; btn.textContent = 'Ask';
-  wrap.append(input, btn);
+  btn.type = 'button'; btn.className = 'ask-btn'; btn.textContent = 'ASK';
+  row.append(input, btn);
+  wrap.append(hd, row);
   convertBtn.parentNode.insertBefore(wrap, convertBtn);
 
   async function getParsed(text) {

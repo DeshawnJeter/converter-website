@@ -1134,3 +1134,18 @@ select option { background: #0f0a1e; color: var(--text); }
   .quest-btns { grid-template-columns: 1fr; }
   .complete-actions .btn-cta-ghost { display: block; }
 }
+
+/* Ask in words (?ask=1 / ?ai=1) */
+.ask-row { display: flex; gap: 10px; align-items: center; }
+.ask-row input { flex: 1; min-width: 0; }
+.ask-btn {
+  min-height: 44px; padding: 0 22px;
+  border-radius: 10px; border: none; font: inherit; font-weight: 800; letter-spacing: 0.12em;
+  cursor: pointer; color: #fff;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.4);
+  transition: transform 0.15s, filter 0.15s;
+}
+.ask-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+.ask-btn:active { transform: translateY(0); }
+.ask-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
