@@ -33,7 +33,7 @@ Prompt injection: model output must match the schema; extra fields rejected (tes
 ## Not done
 Live arm B results; model-version pinning beyond the `MODEL` env default (`claude-haiku-5-5`); hybrid arm.
 
-## Arm B result (claude-sonnet-5-5, one run, 2026-11-07, `experiments/results-B.json`)
+## Arm B result (claude-sonnet-5-5, one run, 2026-11-07, `experiments/results-B-anthropic.json`)
 | Metric | Arm A (rules) | Arm B (Sonnet 5.5) | Rule | Pass |
 |---|---|---|---|---|
 | Accuracy, answerable cases | 85.5% | 96.1% | >= 95% | yes |
@@ -56,3 +56,18 @@ No model, no server, no API key; runs in the browser, even from the file. The ru
 - Held-out set (`experiments/holdout.js`, 16 cases written after tuning): 9 of 12 answerable correct (75%); 4 of 4 refusals correct; 0 wrong accepted. Misses: transposed letters ("miels"), a long sentence ("how fast is that"), and an unlisted word ("kilos").
 - Trade-off: free, private, instant, and safe to refuse, but only as smart as its alias list. The model path (`?ai=1`) stays the option for open-ended phrasing, with the two failed criteria above.
 - With rules now answering more, the hybrid's offline estimate is 16 of 92 cases (17.4%) reaching the model: only the must-refuse cases.
+
+## Arm B on a second model (Groq `openai/gpt-oss-20b`, low reasoning, one run, 2026-11-07, `experiments/results-B-groq.json`)
+Different provider and model, so not directly comparable with the Sonnet 5.5 run.
+
+| Metric | Rule | Sonnet 5.5 | gpt-oss-20b | Pass (gpt-oss-20b) |
+|---|---|---|---|---|
+| Accuracy, answerable | >= 95% | 96.1% | 90.8% | no |
+| Wrong answers accepted | 0 | 0 | **2** | no |
+| Must-refuse accepted | 0 of 16 | 1 | 0 | yes |
+| Latency p95 | <= 1500 ms | 1726 ms | 3421 ms | no |
+| Tokens (92 calls) | n/a | 36.5k in / 2.7k out | 31.6k in / 4.5k out | n/a |
+
+Finding: the 2 wrong answers got through the validator because it checks shape, not meaning. The model did the arithmetic itself ("10 m/s to km/h" returned value 36, not 10) and picked a wrong unit (kcal to kwh instead of kj). So "the model never does arithmetic" is an instruction the model can break; the validator cannot catch it.
+Mitigations to build if the model path is kept: make the page show the parsed reading ("10 m/s to km/h") before the result, and prefer the rules-first hybrid so clean requests never reach the model.
+Outcome unchanged: model path stays opt-in (`?ai=1`); key-free rules (`?ask=1`) remain the default recommendation.

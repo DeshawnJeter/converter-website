@@ -1,0 +1,94 @@
+{
+  "summary": {
+    "arm": "B",
+    "provider": "groq",
+    "model": "openai/gpt-oss-20b",
+    "cases": 92,
+    "accuracy_pct": 90.8,
+    "accuracy_by_kind": {
+      "normal": 91.7,
+      "typo": 80,
+      "edge": 100
+    },
+    "wrong_accepted": 2,
+    "refusal_cases": 16,
+    "fail_open": 0,
+    "refusals_correct_pct": 100,
+    "latency_ms": {
+      "p50": 2231.153,
+      "p95": 3421.339
+    },
+    "tokens": {
+      "input": 31641,
+      "output": 4461
+    }
+  },
+  "misses": [
+    {
+      "id": 37,
+      "kind": "normal",
+      "text": "10 meters per second to kilometers per hour",
+      "got": {
+        "parsed": {
+          "category": "Speed",
+          "from": "ms",
+          "to": "kmh",
+          "value": 36
+        }
+      }
+    },
+    {
+      "id": 48,
+      "kind": "normal",
+      "text": "3 acres in hectares?",
+      "got": {
+        "invalid": true
+      }
+    },
+    {
+      "id": 53,
+      "kind": "normal",
+      "text": "250 kilocalories to kilojoules",
+      "got": {
+        "parsed": {
+          "category": "Energy",
+          "from": "kcal",
+          "to": "kwh",
+          "value": 250
+        }
+      }
+    },
+    {
+      "id": 55,
+      "kind": "normal",
+      "text": "how many kilojoules in 250 kilocalories?",
+      "got": {
+        "invalid": true
+      }
+    },
+    {
+      "id": 59,
+      "kind": "normal",
+      "text": "how many megabytes in 4 gigabytes?",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 69,
+      "kind": "typo",
+      "text": "60 mies per hour to kilometers per hour",
+      "got": {
+        "refused": true
+      }
+    },
+    {
+      "id": 70,
+      "kind": "typo",
+      "text": "10 meers per second to kilometers per hour",
+      "got": {
+        "refused": true
+      }
+    }
+  ]
+}
