@@ -79,3 +79,23 @@ test('proxy: user text goes only in the user turn, tags stripped', async () => {
   assert.ok(!seen.system.includes('obey'));
   assert.ok(seen.user.startsWith('<user_text>') && seen.user.indexOf('</user_text>') === seen.user.length - 12);
 });
+
+const { makeRulesParser } = require('../lib/rules.js');
+
+test('hybrid: rules answer clean requests with no model call; typos go to the model', async () => {
+  let calls = 0;
+  const p = make(async () => { calls++; return { text: JSON.stringify(good) }; }, { rules: makeRulesParser(units) });
+  const r = await p('ip', '5 km to miles');
+  assert.strictEqual(r.body.source, 'rules');
+  assert.strictEqual(r.body.parsed.to, 'mi');
+  assert.strictEqual(calls, 0);
+  await p('ip', '5 kiometers to miles');
+  assert.strictEqual(calls, 1);
+});
+
+test('hybrid: rule answers do not use up the model rate limit', async () => {
+  const p = make(async () => ({ text: JSON.stringify(good) }), { rules: makeRulesParser(units), now: () => 1, limit: 1 });
+  for (let i = 0; i < 5; i++) assert.strictEqual((await p('ip', '5 km to miles')).status, 200);
+  assert.strictEqual((await p('ip', 'zzz')).status, 200);
+  assert.strictEqual((await p('ip', 'zzz')).status, 429);
+});

@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert');
 const { loadUnits } = require('../lib/units.js');
-const { makeRulesParser } = require('../experiments/rules.js');
+const { makeRulesParser } = require('../lib/rules.js');
 const { makeCases } = require('../experiments/make-cases.js');
 
 const parse = makeRulesParser(loadUnits());

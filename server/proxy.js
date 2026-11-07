@@ -4,20 +4,26 @@ const path = require('node:path');
 const NLParse = require('../nlparse.js');
 const { loadUnits } = require('../lib/units.js');
 const { callAnthropic } = require('../lib/anthropic.js');
+const { makeRulesParser } = require('../lib/rules.js');
 
 const MODEL = process.env.MODEL || 'claude-haiku-5-5';
 
-function createParser({ callModel, units, now = Date.now, limit = 10, windowMs = 60000 }) {
+function createParser({ callModel, units, rules = null, now = Date.now, limit = 10, windowMs = 60000 }) {
   const hits = new Map();
   const system = NLParse.buildSystem(units);
   return async function parse(ip, rawText) {
+    const text = NLParse.sanitizeInput(rawText);
+    if (!text) return { status: 400, body: { error: 'empty_input' } };
+    if (rules) {
+      const r = rules(text);
+      const rv = r.parsed ? NLParse.validate(r.parsed, units) : { ok: false };
+      if (rv.ok) return { status: 200, body: { parsed: rv.parsed, source: 'rules' } };
+    }
     const t = now();
     const recent = (hits.get(ip) || []).filter((x) => t - x < windowMs);
     if (recent.length >= limit) return { status: 429, body: { error: 'rate_limited' } };
     recent.push(t);
     hits.set(ip, recent);
-    const text = NLParse.sanitizeInput(rawText);
-    if (!text) return { status: 400, body: { error: 'empty_input' } };
     let out;
     try {
       out = await callModel({ model: MODEL, system, user: NLParse.wrapUser(text) });
@@ -38,7 +44,8 @@ const STATIC = {
 };
 
 function start(port = Number(process.env.PORT) || 8080) {
-  const parse = createParser({ callModel: callAnthropic, units: loadUnits() });
+  const units = loadUnits();
+  const parse = createParser({ callModel: callAnthropic, units, rules: makeRulesParser(units) });
   const server = http.createServer((req, res) => {
     const url = (req.url || '/').split('?')[0];
     if (req.method === 'POST' && url === '/api/parse') {

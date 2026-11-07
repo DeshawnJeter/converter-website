@@ -3,7 +3,7 @@ const path = require('node:path');
 const NLParse = require('../nlparse.js');
 const { loadUnits } = require('../lib/units.js');
 const { callAnthropic } = require('../lib/anthropic.js');
-const { makeRulesParser } = require('./rules.js');
+const { makeRulesParser } = require('../lib/rules.js');
 const { makeCases } = require('./make-cases.js');
 
 const arm = (process.argv[2] || 'A').toUpperCase();
@@ -13,7 +13,9 @@ const MODEL = process.env.MODEL || 'claude-haiku-5-5';
 const usage = { input: 0, output: 0 };
 
 async function runArm(text) {
-  if (arm === 'A') return makeRulesParser(units)(text);
+  const rules = makeRulesParser(units);
+  if (arm === 'A') return rules(text);
+  if (arm === 'H') { const r = rules(text); if (r.parsed) return { ...r, source: 'rules' }; }
   const out = await callAnthropic({ model: MODEL, system: NLParse.buildSystem(units), user: NLParse.wrapUser(NLParse.sanitizeInput(text)) });
   if (out.usage) { usage.input += out.usage.input_tokens || 0; usage.output += out.usage.output_tokens || 0; }
   const v = NLParse.validate(NLParse.parseModelOutput(out.text), units);
@@ -27,6 +29,12 @@ const q = (arr, p) => arr.slice().sort((x, y) => x - y)[Math.min(arr.length - 1,
 (async () => {
   if (arm === 'B' && !process.env.ANTHROPIC_API_KEY) {
     console.log('Arm B skipped: set ANTHROPIC_API_KEY to run it live. No results written.');
+    return;
+  }
+  if (arm === 'H' && !process.env.ANTHROPIC_API_KEY) {
+    const rules = makeRulesParser(units);
+    const misses = cases.filter((c) => !rules(c.text).parsed).length;
+    console.log(`Hybrid offline estimate: ${cases.length - misses} of ${cases.length} answered by rules with no model call; ${misses} (${pct(misses, cases.length)}%) would call the model. Accuracy needs a live run (ANTHROPIC_API_KEY). No results written.`);
     return;
   }
   const rows = [];

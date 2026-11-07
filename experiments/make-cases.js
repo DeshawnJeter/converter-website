@@ -1,4 +1,4 @@
-const { ALIASES } = require('./rules.js');
+const { ALIASES } = require('../lib/rules.js');
 
 const PAIRS = [
   ['Distance', 'km', 'mi', 5], ['Distance', 'mi', 'km', 26.2], ['Weight', 'lb', 'kg', 150], ['Weight', 'kg', 'lb', 70],
