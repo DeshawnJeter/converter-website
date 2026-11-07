@@ -1,0 +1,23 @@
+{
+  "summary": {
+    "arm": "A",
+    "model": null,
+    "cases": 92,
+    "accuracy_pct": 100,
+    "accuracy_by_kind": {
+      "normal": 100,
+      "typo": 100,
+      "edge": 100
+    },
+    "wrong_accepted": 0,
+    "refusal_cases": 16,
+    "fail_open": 0,
+    "refusals_correct_pct": 100,
+    "latency_ms": {
+      "p50": 0.011,
+      "p95": 0.177
+    },
+    "tokens": null
+  },
+  "misses": []
+}
