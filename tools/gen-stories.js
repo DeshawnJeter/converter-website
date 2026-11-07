@@ -50,7 +50,7 @@ if (require.main === module) {
   const model = process.env.MODEL || 'claude-haiku-5-5';
   if (!category || !loadUnits()[category]) { console.log('Usage: node tools/gen-stories.js <Category>'); process.exit(1); }
   if (!process.env.ANTHROPIC_API_KEY) { console.log('Set ANTHROPIC_API_KEY to generate. Nothing written.'); process.exit(0); }
-  generate({ category, callModel: (a) => callAnthropic({ model, maxTokens: 600, timeoutMs: 20000, temperature: 0.7, ...a }) }).then((r) => {
+  generate({ category, callModel: (a) => callAnthropic({ model, maxTokens: 600, timeoutMs: 20000, ...a }) }).then((r) => {
     console.log(`attempts ${r.attempts}, accepted ${r.accepted.length}, rejected ${r.rejected.length}${r.needsHuman ? ' (needs human)' : ''}`);
     console.log('Written (all approved:false):', writePending(category, r, model));
     console.log('A human must review the file, set approved:true, and copy templates into NARRATIVES by hand.');
