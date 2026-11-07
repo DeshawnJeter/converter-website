@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax check
+        run: for f in $(git ls-files '*.js'); do node --check "$f"; done
+      - name: Tests
+        run: npm test
+      - name: Secret scan
+        run: |
+          if grep -rEI --exclude-dir=.git 'sk-ant-[A-Za-z0-9_-]{20,}|gsk_[A-Za-z0-9]{20,}' .; then
+            echo "Possible API key found"; exit 1
+          fi
+      - name: Offline baseline guard
+        run: |
+          node experiments/run.js A > /dev/null
+          node -e "const s=require('./experiments/results-A.json').summary; if(s.wrong_accepted>0||s.fail_open>0){console.error(s);process.exit(1)}"
