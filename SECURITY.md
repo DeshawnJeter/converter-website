@@ -2,9 +2,10 @@
 
 ## Reporting a vulnerability
 
-Please do not open a public issue for a security problem. Contact the owner (DeshawnJeter) directly, with steps to reproduce if you can.
+Please do not post the details of a security problem in a public issue.
 
-Once the owner turns on GitHub's private vulnerability reporting, you can also use the Security tab and choose "Report a vulnerability".
+- If you see a **Report a vulnerability** button on this repository's Security tab, use it. That sends the report privately to the owner.
+- If you do not see that button, open an issue titled "Security contact request" with no details about the problem. The owner will reach out to you so you can share the details privately.
 
 ## Secrets
 
