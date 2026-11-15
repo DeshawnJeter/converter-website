@@ -1,0 +1,8 @@
+#!/bin/sh
+# Pre-push check: runs the unit tests before every push. No GitHub Actions minutes are used.
+# Turn it on once per clone:  git config core.hooksPath .githooks
+# Skip once (not recommended):  git push --no-verify
+set -e
+cd "$(git rev-parse --show-toplevel)"
+command -v node >/dev/null 2>&1 || { echo "pre-push: node is needed to run the tests." >&2; exit 1; }
+npm test --silent
